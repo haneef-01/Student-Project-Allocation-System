@@ -41,3 +41,4 @@ class Project(Base):
     is_active: Mapped[bool] = mapped_column(default=True)
 
     supervisor: Mapped["User"] = relationship(back_populates="projects")
+

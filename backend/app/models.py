@@ -1,15 +1,9 @@
-from datetime import datetime, timezone
 from typing import Optional
 
-from sqlalchemy import (
-    JSON,
-    CheckConstraint,
-    DateTime,
-    ForeignKey,
-    String,
-    UniqueConstraint,
-)
+from sqlalchemy import CheckConstraint, ForeignKey, String
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
+
+
 class Base(DeclarativeBase):
     pass
 

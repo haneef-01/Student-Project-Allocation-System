@@ -19,3 +19,9 @@
 - Alternatives considered: storing rankings as columns on the student table; storing the algorithm on each allocation
 - Why: Preference is its own table because a student ranks many projects and a project is ranked by many students, so each ranking is one row. The algorithm is recorded on the run so it is stored once and I can compare algorithms on the same round. Ties are left out of the first version to keep it simple.
 - Report section it feeds: Design
+
+## 2026-11-12: Decision: database tools
+- What: wrote the User and Project models with SQLAlchemy, using SQLite for development
+- Alternatives considered: writing raw SQL by hand; using Django; using MySQL
+- Why: SQLite needs no setup and SQLAlchemy lets me move to PostgreSQL or MySQL later by changing one setting. Flask handles the web side and SQLAlchemy the data side, which keeps the layers separate.
+- Report section it feeds: Design / Implementation

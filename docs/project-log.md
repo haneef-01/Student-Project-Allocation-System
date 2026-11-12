@@ -13,3 +13,9 @@
 - Alternatives considered: one backend folder with everything together
 - Why: keeping the matching algorithm separate from the web code means I can test it on small examples I check by hand, swap in other algorithms to compare in my evaluation, and keep the web layer simple.
 - Report section it feeds: Design
+
+## 2026-11-12: Decision: domain model
+- What: designed the domain model with User, Project, AllocationRound, Preference, SupervisorRanking, AllocationRun and Allocation
+- Alternatives considered: storing rankings as columns on the student table; storing the algorithm on each allocation
+- Why: Preference is its own table because a student ranks many projects and a project is ranked by many students, so each ranking is one row. The algorithm is recorded on the run so it is stored once and I can compare algorithms on the same round. Ties are left out of the first version to keep it simple.
+- Report section it feeds: Design

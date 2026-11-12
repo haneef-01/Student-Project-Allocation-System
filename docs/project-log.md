@@ -25,3 +25,16 @@
 - Alternatives considered: writing raw SQL by hand; using Django; using MySQL
 - Why: SQLite needs no setup and SQLAlchemy lets me move to PostgreSQL or MySQL later by changing one setting. Flask handles the web side and SQLAlchemy the data side, which keeps the layers separate.
 - Report section it feeds: Design / Implementation
+
+## 2026-11-12: Decision: database rules
+- What: added the remaining five tables and made the database itself enforce the key rules:
+  - a student cannot rank the same project twice in a round (UNIQUE round, student, project)
+  - a student cannot give two projects the same rank in a round (UNIQUE round, student, rank)
+  - ranks start at 1 and project capacity is at least 1 (CHECK constraints)
+  - each email is used by one user only (UNIQUE email)
+  - a student has at most one allocation per run (UNIQUE run, student)
+  - every link between tables must point to a real row (foreign keys)
+- Alternatives considered: checking the rules only in the Python code
+- Why: if the Python code has a bug, the database still refuses bad data such as a duplicate ranking, so the matching algorithm can trust its input. The rules are also written in one place, which makes them easy to explain and to test.
+- Known limits, to handle in the API: the database does not check that student_id belongs to a user with the role "student", that a supervisor's total capacity is respected, or that projects with rankings are deactivated instead of deleted. SQLite also needs foreign keys switched on in the app setup.
+- Report section it feeds: Design / Implementation

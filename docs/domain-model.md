@@ -12,7 +12,7 @@
 
 ### AllocationRound
 - Purpose: one allocation cycle, with a deadline and a status.
-- Fields: id, name, deadline, status (draft | open | closed | allocated), final_run_id
+- Fields: id, name, deadline, status (draft | open | closed | allocated)
 
 ### Preference
 - Purpose: one student's ranking of one project in one round.
@@ -24,7 +24,7 @@
 
 ### AllocationRun
 - Purpose: one execution of one algorithm on one round, so algorithms can be compared.
-- Fields: id, round_id, algorithm, run_at, summary (counts of 1st, 2nd, 3rd choice and unallocated)
+- Fields: id, round_id, algorithm, run_at, is_final, summary (counts of 1st, 2nd, 3rd choice and unallocated)
 
 ### Allocation
 - Purpose: the result for one student in one run.
@@ -49,6 +49,7 @@
 - Department is kept on User and Project, because the title promises multi-department use.
 - Algorithm recorded on AllocationRun, not Allocation, so it is stored once.
 - Ties are not supported in the first version.
+- Marked the chosen run with is_final instead of storing it on the round, to avoid two tables pointing at each other.
 
 ## To confirm
 - Do supervisors rank students or projects? This decides whether SupervisorRanking is needed and what it holds.

@@ -22,5 +22,5 @@
 -R13 (S) An admin can export the results.
 
 ##Whole system
--R14 (M) A first-time user from a non-technical department can complete their task without training. You’d measure this in user testing with non-CS people. 
+-R14 (M) A first-time user from a non-technical department can complete their task without training. 
 -R15 (M) The matching algorithm is a separate, replaceable module, tested on small hand-checked examples, and each result is checked for stability. 

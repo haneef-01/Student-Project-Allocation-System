@@ -38,3 +38,9 @@
 - Why: if the Python code has a bug, the database still refuses bad data such as a duplicate ranking, so the matching algorithm can trust its input. The rules are also written in one place, which makes them easy to explain and to test.
 - Known limits, to handle in the API: the database does not check that student_id belongs to a user with the role "student", that a supervisor's total capacity is respected, or that projects with rankings are deactivated instead of deleted. SQLite also needs foreign keys switched on in the app setup.
 - Report section it feeds: Design / Implementation
+
+## 2026-11-25: Decision: changes after supervisor meeting
+- What: Matt confirmed the problem is Student-Project Allocation with project and supervisor capacities. Supervisors rank projects, not students. The goal is a stable matching. Ties are left out of the first version. The TP1 report is the literature review, and the website only needs basic working features.
+- Alternatives considered: supervisors ranking students
+- Why: Matt said supervisors rank projects, not students, so the supervisor ranking table is no longer part of the core design. The algorithm becomes the version where lecturers have preferences over projects, which is the case studied by Manlove and O'Malley. Ranking students will only be a possible later extension, for students a supervisor has already discussed a project with. Leaving out ties keeps the first version small enough to finish and test.
+- Report section it feeds: Design

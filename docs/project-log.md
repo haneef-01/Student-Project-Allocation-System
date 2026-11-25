@@ -44,3 +44,4 @@
 - Alternatives considered: supervisors ranking students
 - Why: Matt said supervisors rank projects, not students, so the supervisor ranking table is no longer part of the core design. The algorithm becomes the version where lecturers have preferences over projects, which is the case studied by Manlove and O'Malley. Ranking students will only be a possible later extension, for students a supervisor has already discussed a project with. Leaving out ties keeps the first version small enough to finish and test.
 - Report section it feeds: Design
+- Report section it feeds: Design

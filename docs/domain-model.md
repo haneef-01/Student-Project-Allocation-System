@@ -7,8 +7,8 @@
 - Fields: id, name, email, password_hash, role (student | supervisor | admin), department, max_students (supervisors only)
 
 ### Project
-- Purpose: a project offered by one supervisor that students can rank.
-- Fields: id, title, description, supervisor_id, capacity, department, is_active
+- Purpose: a project offered by one supervisor that students can rank. The supervisor also ranks their own projects.
+- Fields: id, title, description, supervisor_id, supervisor_rank (1 = best, within that supervisor's list), capacity, department, is_active
 
 ### AllocationRound
 - Purpose: one allocation cycle, with a deadline and a status.
@@ -17,10 +17,6 @@
 ### Preference
 - Purpose: one student's ranking of one project in one round.
 - Fields: id, round_id, student_id, project_id, rank
-
-### SupervisorRanking (to confirm with Matt)
-- Purpose: a supervisor's ranking of one student in one round.
-- Fields: id, round_id, supervisor_id, student_id, rank
 
 ### AllocationRun
 - Purpose: one execution of one algorithm on one round, so algorithms can be compared.
@@ -33,13 +29,15 @@
 
 ## Relationships
 - One supervisor has many projects.
-- One round has many preferences, supervisor rankings and runs.
+- One supervisor ranks their own projects using supervisor_rank on Project.
+- One round has many preferences and runs.
 - One student has many preferences, one per ranked project.
 - One run has many allocations, at most one per student.
 
 ## Rules the database must enforce
 - A student cannot rank the same project twice in a round.
 - A student cannot give two projects the same rank in a round (strict preferences).
+- A supervisor cannot give two of their projects the same rank.
 - Project capacity is at least 1.
 - A supervisor's total capacity can be lower than the sum of their projects' capacities. That is the point of SPA.
 - Projects with preferences or allocations are deactivated, never deleted.
@@ -50,8 +48,10 @@
 - Algorithm recorded on AllocationRun, not Allocation, so it is stored once.
 - Ties are not supported in the first version.
 - Marked the chosen run with is_final instead of storing it on the round, to avoid two tables pointing at each other.
+- Supervisors rank projects, not students (confirmed by Matt). supervisor_rank sits on Project, and SupervisorRanking was removed.
+- supervisor_rank belongs to the project, not to a round, so one ranking applies in every round. This is fine for version 1 and can change later.
 
 ## To confirm
-- Do supervisors rank students or projects? This decides whether SupervisorRanking is needed and what it holds.
+- When several students compete for the last place on a project, what breaks the tie? Suggestion: random order with a fixed seed, so results can be reproduced.
 - Must students rank a minimum number of projects?
 - Should ties be added later?

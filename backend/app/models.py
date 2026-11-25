@@ -11,6 +11,7 @@ from sqlalchemy import (
 )
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 
+
 class Base(DeclarativeBase):
     pass
 
@@ -31,17 +32,22 @@ class User(Base):
 
 class Project(Base):
     __tablename__ = "projects"
-    __table_args__ = (CheckConstraint("capacity >= 1"),)
+    __table_args__ = (
+        CheckConstraint("capacity >= 1"),
+        UniqueConstraint("supervisor_id", "supervisor_rank"),
+    )
 
     id: Mapped[int] = mapped_column(primary_key=True)
     title: Mapped[str] = mapped_column(String(200))
     description: Mapped[Optional[str]]
     supervisor_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
+    supervisor_rank: Mapped[Optional[int]]  # position in the supervisor's list, 1 = best
     capacity: Mapped[int] = mapped_column(default=1)
     department: Mapped[Optional[str]] = mapped_column(String(100))
     is_active: Mapped[bool] = mapped_column(default=True)
 
     supervisor: Mapped["User"] = relationship(back_populates="projects")
+
 
 class AllocationRound(Base):
     __tablename__ = "allocation_rounds"
@@ -64,21 +70,6 @@ class Preference(Base):
     round_id: Mapped[int] = mapped_column(ForeignKey("allocation_rounds.id"))
     student_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
     project_id: Mapped[int] = mapped_column(ForeignKey("projects.id"))
-    rank: Mapped[int]
-
-
-class SupervisorRanking(Base):  # to confirm with Matt
-    __tablename__ = "supervisor_rankings"
-    __table_args__ = (
-        UniqueConstraint("round_id", "supervisor_id", "student_id"),
-        UniqueConstraint("round_id", "supervisor_id", "rank"),
-        CheckConstraint("rank >= 1"),
-    )
-
-    id: Mapped[int] = mapped_column(primary_key=True)
-    round_id: Mapped[int] = mapped_column(ForeignKey("allocation_rounds.id"))
-    supervisor_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
-    student_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
     rank: Mapped[int]
 
 

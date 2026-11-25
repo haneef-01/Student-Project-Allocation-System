@@ -44,4 +44,28 @@
 - Alternatives considered: supervisors ranking students
 - Why: Matt said supervisors rank projects, not students, so the supervisor ranking table is no longer part of the core design. The algorithm becomes the version where lecturers have preferences over projects, which is the case studied by Manlove and O'Malley. Ranking students will only be a possible later extension, for students a supervisor has already discussed a project with. Leaving out ties keeps the first version small enough to finish and test.
 - Report section it feeds: Design
+
+## 2026-11-25: Decision: supervisor ranking stored on Project, and R10 made a Must
+- What: removed the SupervisorRanking table and added supervisor_rank to Project, with a rule that one supervisor cannot give two projects the same rank (UNIQUE supervisor, rank). Reworded R8 to "A supervisor can rank their own projects" and made it a Must. Made R10 (deadlines) a Must.
+- Alternatives considered: keeping SupervisorRanking as a separate table; keeping R10 as a Should and dropping "until the deadline" from R3
+- Why: a supervisor now ranks their own projects, so each project has one position in one supervisor's list and a column on Project is enough. The database can check the rule, as it does for the other rankings. R8 is a Must because the algorithm needs preferences from both sides. R3 says students can edit their ranking until the deadline, so the deadline feature has to exist and R10 cannot matter less than R3.
+- Known limit: supervisor_rank belongs to the project, not to a round, so the same ranking applies in every round. This is fine for version 1.
 - Report section it feeds: Design
+
+## 2026-11-25: Decision: algorithm based on Manlove and O'Malley (2008)
+- What: will implement spa-p-approx, their algorithm for the case where lecturers rank projects, as the main matching algorithm in backend/matching, with a stability checker that tests both blocking pairs and coalitions.
+- Alternatives considered: the earlier Gale-Shapley version where lecturers rank students (Abraham, Irving and Manlove 2003); inventing my own method
+- Why: Matt said supervisors rank projects, not students, so the version where lecturers rank students does not fit. The paper defines stability for exactly this case: no blocking pair, and no coalition (a group of students who could swap projects and all do better). Their algorithm finds a stable matching in linear time. Stable matchings can differ in size and finding the largest is NP-hard, so theirs is only guaranteed to be within a factor of 2 of the best. I will measure how many students get a place, compare against random and first-come-first-served baselines, and not claim the maximum.
+- Tie-break: the algorithm leaves two choices arbitrary, the order students apply in and which student a lecturer drops when over capacity. My plan is a random order of students with a fixed seed, so results can be repeated. Not agreed with Matt yet.
+- Report section it feeds: Background / Design
+
+## 2026-11-25: Decision: keep Word files out of the repository
+- What: added *.docx to .gitignore after committing my project definition by accident. Removed it before pushing.
+- Alternatives considered: leaving it in the repository
+- Why: the repository is public and the file may hold personal details. Documents stay on my laptop instead.
+- Report section it feeds: none
+
+## 2026-11-25: Questions for Matt
+- Is a random order of students with a fixed seed an acceptable tie-break?
+- What is the TP1 report deadline: 11 December, or a January date? The page says 18 January 2026, which looks like a typo.
+- Do I need a separate Project Plan document?
